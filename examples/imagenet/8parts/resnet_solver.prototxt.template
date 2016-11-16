@@ -4,9 +4,10 @@ test_iter: 125
 test_interval: 5000
 test_initialization: false
 snapshot_after_train: false
-display: 40
+# display: 40
+display: 1
 average_loss: 40
-base_lr: 0.045
+base_lr: 0.0000001
 lr_policy: "step"
 # stepsize: 6400
 stepsize: 800

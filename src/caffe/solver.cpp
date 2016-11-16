@@ -352,12 +352,13 @@ void Solver<float>::PrepareAccessInfo() {
         imb_diffs_used_fw[blob_id] = FetchKeep(false, true);
       }
       /* In the backward pass, use (fetch, no keep) the top data blobs
-       * only in ReLU, LRN, Pooling, Dropout,
+       * only in ReLU, LRN, Pooling, Dropout, Eltwise,
        * and SoftmaxWithLoss layers */
       if (layer_types[layer_id] == "ReLU" ||
           layer_types[layer_id] == "LRN" ||
           layer_types[layer_id] == "Pooling" ||
           layer_types[layer_id] == "Dropout" ||
+          layer_types[layer_id] == "Eltwise" ||
           layer_types[layer_id] == "SoftmaxWithLoss") {
         imbs_used_bw[blob_id] = FetchKeep(true, false);
       }
@@ -368,7 +369,7 @@ void Solver<float>::PrepareAccessInfo() {
         }
       }
       /* In the backward pass, use (fetch, no keep) all top diff blobs,
-       * except for Data layers, top[1] of LRN, Pooling layers, BatchNorm,
+       * except for Data layers, top[i>0] of LRN, Pooling layers, BatchNorm,
        * and Dropout layers */
       if (layer_types[layer_id] == "Data" ||
           (layer_types[layer_id] == "LRN" && i > 0) ||
