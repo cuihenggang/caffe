@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 input_file = sys.argv[1]
 num_workers = 8
-pdsh = 0
+pdsh = 1
 if len(sys.argv) > 2:
   num_workers = int(sys.argv[2])
 if len(sys.argv) > 3:

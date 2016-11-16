@@ -6,11 +6,11 @@ test_initialization: false
 snapshot_after_train: false
 display: 40
 average_loss: 40
-base_lr: 0.01
+base_lr: 0.045
 lr_policy: "step"
 # stepsize: 6400
 stepsize: 800
-gamma: 1
+gamma: 0.96
 max_iter: 1200000
 momentum: 0.9
 weight_decay: 0.0002

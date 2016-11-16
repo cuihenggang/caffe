@@ -38,7 +38,6 @@ CuDNNSoftmaxLayer<Dtype>::~CuDNNSoftmaxLayer() {
 
   cudnnDestroyTensorDescriptor(bottom_desc_);
   cudnnDestroyTensorDescriptor(top_desc_);
-  cudnnDestroy(handle_);
 }
 
 INSTANTIATE_CLASS(CuDNNSoftmaxLayer);

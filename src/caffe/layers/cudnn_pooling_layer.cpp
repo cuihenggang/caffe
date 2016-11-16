@@ -38,7 +38,6 @@ CuDNNPoolingLayer<Dtype>::~CuDNNPoolingLayer() {
   cudnnDestroyTensorDescriptor(bottom_desc_);
   cudnnDestroyTensorDescriptor(top_desc_);
   cudnnDestroyPoolingDescriptor(pooling_desc_);
-  cudnnDestroy(handle_);
 }
 
 INSTANTIATE_CLASS(CuDNNPoolingLayer);

@@ -1,4 +1,5 @@
-def Convolution(data, name, num_filter, kernel, stride=[1,1], pad=[0,0]):
+def Convolution(data, name, num_filter, kernel, stride=[1,1], pad=[0,0], no_bias=True, workspace=512):
+  assert no_bias
   bottom = data
   top = name
   print 'layer {'
@@ -20,32 +21,37 @@ def Convolution(data, name, num_filter, kernel, stride=[1,1], pad=[0,0]):
   print '}'
   return top
 
-def BatchNorm(data, name):
+def BatchNorm(data, name, fix_gamma=False, momentum=0.9, eps=1e-4):
   bottom = data
   top = name
   temp1 = top + '/temp1'
   temp2 = top + '/temp2'
+  temp3 = top + '/temp3'
+  temp4 = top + '/temp4'
   print 'layer {'
   print '  bottom: "%s"' % bottom
   print '  name: "%s"' % name
   print '  top: "%s"' % top
   print '  top: "%s"' % temp1
   print '  top: "%s"' % temp2
+  print '  top: "%s"' % temp3
+  print '  top: "%s"' % temp4
   print '  type: "BatchNorm"'
-  print '}'
-  bottom2 = top
-  name2 = bottom2 + '/sc'
-  top2 = name2
-  print 'layer {'
-  print '  bottom: "%s"' % bottom2
-  print '  top: "%s"' % top2
-  print '  name: "%s"' % name2
-  print '  type: "Scale"'
-  print '  scale_param {'
-  print '    bias_term: true'
+  print '  batch_norm_param {'
+  print '    moving_average_fraction: %f' % momentum
+  print '    eps: %f' % eps
+  print '    use_global_stats: false'
+  print '    scale_filler {'
+  print '      type: "constant"'
+  print '      value: 1 '
+  print '    }'
+  print '    bias_filler {'
+  print '      type: "constant"'
+  print '      value: 0 '
+  print '    }'
   print '  }'
   print '}'
-  return top2
+  return top
 
 def Activation(data, name, act_type):
   assert act_type == "relu"
@@ -138,4 +144,15 @@ def FullyConnected(data, name, num_hidden):
 def Flatten(data, name):
   bottom = data
   top = bottom
+  return top
+
+def Add(bottoms, name):
+  top = name
+  print 'layer {'
+  for bottom in bottoms:
+    print '  bottom: "%s"' % bottom
+  print '  top: "%s"' % top
+  print '  name: "%s"' % name
+  print '  type: "Eltwise"'
+  print '}'
   return top

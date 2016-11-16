@@ -352,18 +352,24 @@ void Solver<float>::PrepareAccessInfo() {
         imb_diffs_used_fw[blob_id] = FetchKeep(false, true);
       }
       /* In the backward pass, use (fetch, no keep) the top data blobs
-       * only in ReLU, LRN, Pooling, BatchNorm, Dropout,
+       * only in ReLU, LRN, Pooling, Dropout, Eltwise,
        * and SoftmaxWithLoss layers */
       if (layer_types[layer_id] == "ReLU" ||
           layer_types[layer_id] == "LRN" ||
           layer_types[layer_id] == "Pooling" ||
-          layer_types[layer_id] == "BatchNorm" ||
           layer_types[layer_id] == "Dropout" ||
+          layer_types[layer_id] == "Eltwise" ||
           layer_types[layer_id] == "SoftmaxWithLoss") {
         imbs_used_bw[blob_id] = FetchKeep(true, false);
       }
+      if (layer_types[layer_id] == "BatchNorm") {
+        /* For the BatchNorm layer, we use only the data of top[1] and top[2] */
+        if (i == 1 || i == 2) {
+          imbs_used_bw[blob_id] = FetchKeep(true, false);
+        }
+      }
       /* In the backward pass, use (fetch, no keep) all top diff blobs,
-       * except for Data layers, top[1] of LRN, Pooling layers, BatchNorm,
+       * except for Data layers, top[i>0] of LRN, Pooling layers, BatchNorm,
        * and Dropout layers */
       if (layer_types[layer_id] == "Data" ||
           (layer_types[layer_id] == "LRN" && i > 0) ||
@@ -803,6 +809,9 @@ void SGDSolver<float>::InitPsValues() {
       float *params_vals = reinterpret_cast<float *>(update_buffer);
       for (int param_id = 0;
           param_id < layer_info.param_infos.size(); param_id++) {
+        if (print_) {
+          LOG(INFO) << "Param #" << param_id;
+        }
         int param_val_offset = layer_info.param_infos[param_id].val_offset;
         float *param_vals = &params_vals[param_val_offset];
         shared_ptr<Blob<float> >& param = layer->blobs()[param_id];
@@ -1500,8 +1509,9 @@ void Solver<Dtype>::Step(int iters) {
     const bool display = param_.display() && iter_ % param_.display() == 0;
     const bool do_snapshot = iter_ != start_iter
         && param_.snapshot() && iter_ % param_.snapshot() == 0;
-    const bool print_ps_info = iter_ != start_iter
-        && (iter_ % 1000 == 0 || iter_ == stop_iter);
+    // const bool print_ps_info = iter_ != start_iter
+        // && (iter_ % 1000 == 0 || iter_ == stop_iter);
+    const bool print_ps_info = false;
 
     if (print_ps_info) {
       double total_time = (tbb::tick_count::now() - tick_start).seconds();

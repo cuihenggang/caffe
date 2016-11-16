@@ -38,7 +38,8 @@ class Layer {
    * layer.
    */
   explicit Layer(const LayerParameter& param)
-    : layer_param_(param), is_shared_(false) {
+    : layer_param_(param), is_shared_(false),
+      forward_passed_(false), backward_passed_(false) {
       // Set phase and copy blobs (if there are any).
       phase_ = param.phase();
       if (layer_param_.blobs_size() > 0) {
@@ -322,6 +323,21 @@ class Layer {
     param_propagate_down_[param_id] = value;
   }
 
+  bool IsForwardPassed() const {
+    return forward_passed_;
+  }
+
+  void ForwardPassed(bool passed) {
+    forward_passed_ = passed;
+  }
+
+  bool IsBackwardPassed() const {
+    return backward_passed_;
+  }
+
+  void BackwardPassed(bool passed) {
+    backward_passed_ = passed;
+  }
 
  protected:
   /** The protobuf that stores the layer parameters */
@@ -419,7 +435,7 @@ class Layer {
    */
   inline void SetLossWeights(const vector<Blob<Dtype>*>& top) {
     const int num_loss_weights = layer_param_.loss_weight_size();
-    LOG(INFO) << "num_loss_weights = " << num_loss_weights;
+    // LOG(INFO) << "num_loss_weights = " << num_loss_weights;
     if (num_loss_weights) {
       CHECK_EQ(top.size(), num_loss_weights) << "loss_weight must be "
           "unspecified or specified once per top blob.";
@@ -437,6 +453,9 @@ class Layer {
  private:
   /** Whether this layer is actually shared by other nets*/
   bool is_shared_;
+
+  bool forward_passed_;
+  bool backward_passed_;
 
   /** The mutex for sequential forward if this layer is shared */
   shared_ptr<boost::mutex> forward_mutex_;

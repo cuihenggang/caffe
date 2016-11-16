@@ -57,6 +57,8 @@ class GPUParams : public Params<Dtype> {
   using Params<Dtype>::size_;
   using Params<Dtype>::data_;
   using Params<Dtype>::diff_;
+ private:
+  int buffer_device_;
 };
 
 class DevicePair {
@@ -93,7 +95,10 @@ class P2PSync : public GPUParams<Dtype>, public Solver<Dtype>::Callback,
     return solver_;
   }
 
-  void run(const vector<int>& gpus);
+  void Run(const vector<int>& gpus);
+  void Prepare(const vector<int>& gpus,
+               vector<shared_ptr<P2PSync<Dtype> > >* syncs);
+  inline const int initial_iter() const { return initial_iter_; }
 
  protected:
   void on_start();

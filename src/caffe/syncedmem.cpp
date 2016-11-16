@@ -55,6 +55,7 @@ inline void SyncedMemory::to_gpu() {
   switch (head_) {
   case UNINITIALIZED:
     if (gpu_ptr_ == NULL) {
+      LOG(INFO) << "Allocate GPU data for UNINITIALIZED with size " << size_;
       CUDA_CHECK(cudaGetDevice(&gpu_device_));
       CUDA_CHECK(cudaMalloc(&gpu_ptr_, size_));
       own_gpu_data_ = true;
@@ -64,6 +65,7 @@ inline void SyncedMemory::to_gpu() {
     break;
   case HEAD_AT_CPU:
     if (gpu_ptr_ == NULL) {
+      LOG(INFO) << "Allocate GPU data for HEAD_AT_CPU with size " << size_;
       CUDA_CHECK(cudaGetDevice(&gpu_device_));
       CUDA_CHECK(cudaMalloc(&gpu_ptr_, size_));
       own_gpu_data_ = true;

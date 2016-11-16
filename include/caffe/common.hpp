@@ -137,6 +137,9 @@ class Caffe {
   inline static curandGenerator_t curand_generator() {
     return Get().curand_generator_;
   }
+#ifdef USE_CUDNN
+  inline static cudnnHandle_t cudnn_handle() { return Get().cudnn_handle_; }
+#endif
 #endif
 
   // Returns the mode: running on CPU or GPU.
@@ -154,6 +157,11 @@ class Caffe {
   static void SetDevice(const int device_id);
   // Prints the current GPU status.
   static void DeviceQuery();
+  // Check if specified device is available
+  static bool CheckDevice(const int device_id);
+  // Search from start_id to the highest possible device ordinal,
+  // return the ordinal of the first available device.
+  static int FindDevice(const int start_id = 0);
   // Parallel training info
   inline static int solver_count() { return Get().solver_count_; }
   inline static void set_solver_count(int val) { Get().solver_count_ = val; }
@@ -165,6 +173,9 @@ class Caffe {
   cudaStream_t cuda_stream_;
   cublasHandle_t cublas_handle_;
   curandGenerator_t curand_generator_;
+#ifdef USE_CUDNN
+  cudnnHandle_t cudnn_handle_;
+#endif
 #endif
   shared_ptr<RNG> random_generator_;
 
