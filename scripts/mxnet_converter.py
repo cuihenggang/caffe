@@ -1,4 +1,5 @@
-def Convolution(data, name, num_filter, kernel, stride=[1,1], pad=[0,0]):
+def Convolution(data, name, num_filter, kernel, stride=[1,1], pad=[0,0], no_bias=True, workspace=512):
+  assert no_bias
   bottom = data
   top = name
   print 'layer {'
@@ -20,7 +21,7 @@ def Convolution(data, name, num_filter, kernel, stride=[1,1], pad=[0,0]):
   print '}'
   return top
 
-def BatchNorm(data, name):
+def BatchNorm(data, name, fix_gamma=False, momentum=0.9, eps=1e-4):
   bottom = data
   top = name
   temp1 = top + '/temp1'
@@ -37,8 +38,8 @@ def BatchNorm(data, name):
   print '  top: "%s"' % temp4
   print '  type: "BatchNorm"'
   print '  batch_norm_param {'
-  print '    moving_average_fraction: 0.9 '
-  print '    eps: 0.0001'
+  print '    moving_average_fraction: %f' % momentum
+  print '    eps: %f' % eps
   print '    use_global_stats: false'
   print '    scale_filler {'
   print '      type: "constant"'
@@ -143,4 +144,15 @@ def FullyConnected(data, name, num_hidden):
 def Flatten(data, name):
   bottom = data
   top = bottom
+  return top
+
+def Add(bottoms, name):
+  top = name
+  print 'layer {'
+  for bottom in bottoms:
+    print '  bottom: "%s"' % bottom
+  print '  top: "%s"' % top
+  print '  name: "%s"' % name
+  print '  type: "Eltwise"'
+  print '}'
   return top

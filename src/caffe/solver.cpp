@@ -1509,8 +1509,9 @@ void Solver<Dtype>::Step(int iters) {
     const bool display = param_.display() && iter_ % param_.display() == 0;
     const bool do_snapshot = iter_ != start_iter
         && param_.snapshot() && iter_ % param_.snapshot() == 0;
-    const bool print_ps_info = iter_ != start_iter
-        && (iter_ % 1000 == 0 || iter_ == stop_iter);
+    // const bool print_ps_info = iter_ != start_iter
+        // && (iter_ % 1000 == 0 || iter_ == stop_iter);
+    const bool print_ps_info = false;
 
     if (print_ps_info) {
       double total_time = (tbb::tick_count::now() - tick_start).seconds();

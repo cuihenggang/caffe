@@ -7,14 +7,14 @@ snapshot_after_train: false
 # display: 40
 display: 1
 average_loss: 40
-base_lr: 0.0000001
+base_lr: 0.001
 lr_policy: "step"
 # stepsize: 6400
 stepsize: 800
 gamma: 0.96
 max_iter: 1200000
 momentum: 0.9
-weight_decay: 0.0002
+weight_decay: 0.0000002
 random_seed: 1234568
 snapshot: 20000
 snapshot_prefix: "examples/imagenet/8parts/resnet_snapshot"
