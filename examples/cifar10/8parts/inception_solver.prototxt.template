@@ -7,7 +7,7 @@ net: "examples/cifar10/8parts/inception_train_val.prototxt.%"
 # covering the full 10,000 testing images.
 test_iter: 10
 # Carry out testing every 500 training iterations.
-test_interval: 50
+test_interval: 500
 test_initialization: false
 snapshot_after_train: false
 # The base learning rate, momentum and the weight decay of the network.
@@ -22,7 +22,7 @@ average_loss: 50
 # The maximum number of iterations
 max_iter: 40000000
 # snapshot intermediate results
-snapshot: 500
+snapshot: 5000
 # snapshot_format: HDF5
 snapshot_prefix: "examples/cifar10/8parts/inception_snapshot"
 # solver mode: CPU or GPU

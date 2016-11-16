@@ -3,6 +3,4 @@ slack=0
 gpu_memory_capacity=4200000000
 mm_warning_level=3
 layers_per_table=10
-keep_momentum=1
-restore_snapshot=/panfs/probescratch/BigLearning/hengganc/results/16-0516-1729-cifar-inception-from-16-0516-1700-iter2000-8machines-wd005-lr0001-batch32/inception_snapshot_iter_8000
 debug=0

@@ -1020,26 +1020,6 @@ layer {
   bottom: "label"
   top: "loss"
   include {
-    phase: TEST
-  }
-}
-layer {
-  name: "accuracy"
-  type: "Accuracy"
-  bottom: "fc1"
-  bottom: "label"
-  top: "accuracy"
-  include {
-    phase: TRAIN
-  }
-}
-layer {
-  name: "loss"
-  type: "SoftmaxWithLoss"
-  bottom: "fc1"
-  bottom: "label"
-  top: "loss"
-  include {
     phase: TRAIN
   }
 }
