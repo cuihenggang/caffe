@@ -151,8 +151,8 @@ void Net<Dtype>::Init(const NetParameter& in_param) {
     } else {
       layers_[layer_id]->SetUp(bottom_vecs_[layer_id], top_vecs_[layer_id]);
     }
-    LOG_IF(INFO, Caffe::root_solver())
-        << "Setting up " << layer_names_[layer_id];
+    // LOG_IF(INFO, Caffe::root_solver())
+        // << "Setting up " << layer_names_[layer_id];
     for (int top_id = 0; top_id < top_vecs_[layer_id].size(); ++top_id) {
       if (blob_loss_weights_.size() <= top_id_vecs_[layer_id][top_id]) {
         blob_loss_weights_.resize(top_id_vecs_[layer_id][top_id] + 1, Dtype(0));
@@ -396,8 +396,8 @@ void Net<Dtype>::AppendTop(const NetParameter& param, const int layer_id,
   if (blob_name_to_idx && layer_param->bottom_size() > top_id &&
       blob_name == layer_param->bottom(top_id)) {
     // In-place computation
-    LOG_IF(INFO, Caffe::root_solver())
-        << layer_param->name() << " -> " << blob_name << " (in-place)";
+    // LOG_IF(INFO, Caffe::root_solver())
+        // << layer_param->name() << " -> " << blob_name << " (in-place)";
     top_vecs_[layer_id].push_back(blobs_[(*blob_name_to_idx)[blob_name]].get());
     top_id_vecs_[layer_id].push_back((*blob_name_to_idx)[blob_name]);
   } else if (blob_name_to_idx &&
@@ -461,7 +461,7 @@ void Net<Dtype>::AppendParam(const NetParameter& param, const int layer_id,
   const int param_size = layer_param.param_size();
   string param_name =
       (param_size > param_id) ? layer_param.param(param_id).name() : "";
-  LOG(INFO) << "param_name = " << param_name;
+  // LOG(INFO) << "param_name = " << param_name;
   if (param_name.size()) {
     param_display_names_.push_back(param_name);
   } else {
@@ -470,8 +470,8 @@ void Net<Dtype>::AppendParam(const NetParameter& param, const int layer_id,
     param_display_names_.push_back(param_display_name.str());
   }
   const int net_param_id = params_.size();
-  LOG(INFO) << "Adding param " << param_id << " from layer " << layer_id
-             << ", size = " << layers_[layer_id]->blobs()[param_id]->count();
+  // LOG(INFO) << "Adding param " << param_id << " from layer " << layer_id
+             // << ", size = " << layers_[layer_id]->blobs()[param_id]->count();
   params_.push_back(layers_[layer_id]->blobs()[param_id]);
   param_id_vecs_[layer_id].push_back(net_param_id);
   param_layer_indices_.push_back(make_pair(layer_id, param_id));
