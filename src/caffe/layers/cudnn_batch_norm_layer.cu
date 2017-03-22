@@ -27,8 +27,13 @@ void CuDNNBatchNormLayer<Dtype>::Forward_gpu(
   Dtype* save_inv_var = top[2]->mutable_gpu_data();
   double epsilon = max(this->eps_, CUDNN_BN_MIN_EPSILON);
 
-  // if (true) {
-  if (this->phase_ == TRAIN) {
+  /* Cui: We want to use the cudnnBatchNormalizationForwardTraining() method
+   * for both training and testing, because I don't want to use
+   * the running_mean and running_var. */
+  /* Cui TODO: since we are not using running_mean and running_var,
+   * top[3] and top[4] can be removed */
+  if (true) {
+  // if (this->phase_ == TRAIN) {
     Dtype* running_mean = top[3]->mutable_gpu_data();
     Dtype* running_var = top[4]->mutable_gpu_data();
     // Call Batch normalization forward
